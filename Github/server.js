@@ -25,6 +25,8 @@ app.use((req, res, next) => {
   next();
 });
 
+// TODO: Change async to sync using await
+
 app.get('/', (req, res) => {
   data.initialize().then(() => {
     data.delay(delayTime).then(() => {

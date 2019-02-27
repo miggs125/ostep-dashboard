@@ -22,6 +22,29 @@ let today = new Date();
 const oneDay = 24 * 60 * 60 * 1000;
 let recency = oneDay;
 
+// TODO: Check most recent commit with current list, only update if most recent is different
+// Compare length of repoUrls, then length of branchURLs, then author dates?
+// Compare pushed at times (seconds maybe off by a few)
+// Save recent commit times and their repo names
+// Only check repos that have been updated
+// 1. match repo names
+// 2. compare repo push times
+//  - ignore repos that have been updated within the same minute or within 60 seconds
+// 3. save repo name 
+
+// Save sorted recent commits in a JSON file
+// Delete the bottom commits as they become too old
+// Only add new commits on top of recent commits
+
+// Branches have dates?
+// If so, only check branches with commits newer than most recent commit
+// If not, check each branches most recent commits
+// Only check repos with commits more recent than last top most recent commit
+// Compare commit messages to check if same?
+// Try to get commit hash as an unique identifier
+
+
+
 module.exports.initialize = () => {
     return new Promise((resolve, reject) => {
         fs.appendFileSync('output.txt', "INITIALIZE \n");
@@ -33,7 +56,8 @@ module.exports.initialize = () => {
     });
 }
 
-//1. getRepos
+// 1. getRepos
+// Check only the repos that have been updated recently (last 24 hours)
 module.exports.getRepos = () => {
     return new Promise ((resolve, reject) => {
         request.get({
@@ -66,7 +90,8 @@ module.exports.getRepos = () => {
     });
 }
 
-//2. getAllBranchUrls
+// 2. getAllBranchUrls
+// Get all the branches in the list of recent repos
 module.exports.getAllBranchUrls = () => {
     return new Promise((resolve,reject) => {
         for (let i = 0; i < repoUrls.length; i++) {
@@ -102,7 +127,6 @@ let getBranches = (branchUrlX, repoName) => {
     });
 } 
 
-
 let checkBranch = (branchCommitsUrl, branchName, branchURLs, repoName) => {
     return new Promise ((resolve, reject) => {
         request.get({
@@ -135,7 +159,8 @@ let checkBranch = (branchCommitsUrl, branchName, branchURLs, repoName) => {
     });
 } 
 
-//3. getCommits
+// 3. getCommits
+// Get the recent commits from the branches
 module.exports.getAllCommitUrls = () => {
     return new Promise((resolve,reject) => {
         fs.appendFileSync('outputArrays.txt', "getAllCommitUrls BRANCH URLs: " + branchURLs.length + "\n");
@@ -194,6 +219,7 @@ let getTheRecentCommits = (branchCommitsUrl, branchName, repoName) => {
 } 
 
 // 4. sortRecentCommits
+// Sort the recent commits
 module.exports.sortRecentCommits = () => {
     return new Promise((resolve, reject) => {
         recentCommits.sort((a,b) => {
