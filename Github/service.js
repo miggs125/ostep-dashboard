@@ -202,10 +202,21 @@ module.exports.sortRecentCommits = () => {
             return d - c;
         });
         fs.appendFileSync('outputArrays.txt', "sortRecentCommits sorted recent commits: " + recentCommits.length + "\n");
+        
         for (let i = 0; i < recentCommits.length; i++) {
             fs.appendFileSync('outputArrays.txt', recentCommits[i].repoName + ":" + recentCommits[i].branchName + " - " + recentCommits[i].message + "\n");
         }
         resolve(recentCommits);
+    });
+}
+
+module.exports.removeDuplicateCommits = () => {
+    return new Promise((resolve, reject) => {
+        removeDuplicateCommits = recentCommits;
+        for (let i = 0; i < recentCommits.length; i++) {
+            removeDuplicateCommits = removeDuplicateCommits.filter(recentCommits[i]);
+        }
+        resolve(removeDuplicateCommits);
     });
 }
 
