@@ -34,12 +34,8 @@ app.get('/', (req, res) => {
             data.delay(delayTime).then(() => {
               data.getAllCommitUrls().then(() => {
                 data.delay(delayTime).then(() => {
-                  data.sortRecentCommits().then(() =>{
-                    data.delay(delayTime).then(() => {
-                      data.removeDuplicateCommits().then((data) => {
-                        res.json(data);
-                      });
-                    });
+                  data.sortRecentCommits().then((data) =>{
+                    res.json(data);
                   });
                 });
               });
